@@ -1,0 +1,358 @@
+<html>
+
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <script src="https://merchant.paywithzero.net/client/token/Collect.js"
+        data-tokenization-key="2TQdje-6MfPE8-NSUa5B-B44w5K"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+        integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, shrink-to-fit=no" />
+    <style>
+        .invalid {
+            background-color: red !important;
+            color: white !important;
+        }
+    </style>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+    <div class="mx-auto " style="width: 600px;">
+        <h1>Inline CollectJS Demo</h1>
+
+        <form action="/success" method="post">
+
+            <div class="stepper d-flex flex-column mt-5 ml-2">
+                <div class="d-flex mb-1">
+                    <div class="d-flex flex-column pr-4 align-items-center">
+                        <div class="rounded-circle py-2 px-3 bg-primary text-white mb-1">1
+
+                        </div>
+                        <div class="line h-100"></div>
+                    </div>
+                    <div class="container">
+
+                        <div class="form-group row">
+                            <label for="amount" class="col-sm-3 col-form-label">Amount</label>
+                            <div class="col-sm-9">
+                                <input type="number" class="form-control" id="amount" placeholder="0.00">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <button type="button" class="btn btn-primary" style="float: right;width: 125px;"
+                                    onclick="nextAmountFn()" id="nextAmount">Next</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="d-flex mb-1">
+                    <div class="d-flex flex-column pr-4 align-items-center">
+                        <div class="rounded-circle py-2 px-3 bg-primary text-white mb-1" id="containerCardNumber"
+                            style="display: none;">2</div>
+                        <div class="line h-100"></div>
+                    </div>
+                    <div id="containerCard" style="display: none;" class="container">
+                        <div class="form-group row">
+                            <label for="demoCcnumber" class="col-sm-3 col-form-label">CC Number</label>
+                            <div class="col-sm-9">
+                                <div id="demoCcnumber"></div>
+                                <div class="invalid-feedback" id="ccnumberError"> </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="demoCcexp" class="col-sm-3 col-form-label">CC Exp</label>
+                            <div class="col-sm-9">
+                                <div id="demoCcexp"></div>
+                                <div class="invalid-feedback" id="ccexpError"> </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="demoCvv" class="col-sm-3 col-form-label">CVV</label>
+                            <div class="col-sm-9">
+                                <div id="demoCvv"></div>
+                                <div class="invalid-feedback" id="cvvError"> </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <button type="button" class="btn btn-primary" style="float: right;width: 125px" disabled
+                                    onclick="changeLoading(true)" id="confimButton">Confirm Card</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="d-flex mb-1">
+                    <div class="d-flex flex-column pr-4 align-items-center">
+                        <div class="rounded-circle py-2 px-3 bg-primary text-white mb-1" id="detailPayNumber"
+                            style="display: none;">3</div>
+                        <div class="line h-100 d-none"></div>
+                    </div>
+                    <div id="detailPay" style="display: none;" class="container">
+
+                        <div class="row">
+
+                            <div class="col-sm-9 offset-sm-3 row">
+                                <div class="row" style="width: 100%">
+                                    <div class="col-sm-12">
+                                        <table style="float: right;">
+                                            <tr>
+                                                <td style="text-align: right;">Base Amount: </td>
+                                                <td>
+                                                    <div style="width: 45px;text-align: right;">
+                                                        <span id="baseTxt">$0.00 </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align: right;">Surcharge: </td>
+                                                <td>
+                                                    <div style="width: 45px;text-align: right;">
+                                                        <span id="surchargeTxt">$0.00 </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr style="font-weight: bold;">
+                                                <td style="text-align: right;">Total: </td>
+                                                <td>
+                                                    <div style="width: 45px;text-align: right;">
+                                                        <span id="totalTxt">$0.00 </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <button type="button" class="btn btn-primary mt-3" style="float: right;width: 125px"
+                                    onclick=" payFn()" id="payButton">
+                                    Pay
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+
+    <script>
+        var surcharge = 0;
+        var cardNumber;
+        var binCard;
+        var payment_token;
+
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        });
+
+        // document.addEventListener("DOMContentLoaded", function () {
+        function loadScriptFn() {
+            CollectJS.configure({
+                paymentSelector: "#confimButton",
+                variant: "inline",
+                styleSniffer: "true",
+                googleFont: "Montserrat:400",
+                customCss: {
+                    color: "black",
+                    "background-color": "#fafafa",
+                },
+                invalidCss: {
+                    color: "red",
+                    "background-color": "fafafa",
+                },
+                validCss: {
+                    color: "black",
+                    "background-color": "#fafafa",
+                },
+                placeholderCss: {
+                    color: "#b3b3b3",
+                    "background-color": "#fafafa",
+                },
+                focusCss: {
+                    color: "black",
+                    "background-color": "#fafafa",
+                },
+                fields: {
+                    ccnumber: {
+                        selector: "#demoCcnumber",
+                        title: "Card Number",
+                        placeholder: "0000 0000 0000 0000",
+                    },
+                    ccexp: {
+                        selector: "#demoCcexp",
+                        title: "Card Expiration",
+                        placeholder: "00 / 00",
+                    },
+                    cvv: {
+                        display: "show",
+                        selector: "#demoCvv",
+                        title: "CVV Code",
+                        placeholder: "***",
+                    },
+                },
+                validationCallback: function (field, status, message) {
+                    $('#ccnumberError').hide();
+                    $('#ccexpError').hide();
+                    $('#cvvError').hide();
+
+                    if (status) {
+                        var message = field + " is now OK: " + message;
+                    } else {
+                        $('#' + field + 'Error').show();
+                        $('#' + field + 'Error').text(message);
+
+                        var message = field + " is now Invalid: " + message;
+                        changeLoading(false);
+                    }
+                    console.log(message);
+                },
+                timeoutDuration: 10000,
+                timeoutCallback: function () {
+                    console.log(
+                        "The tokenization didn't respond in the expected timeframe.  This could be due to an invalid or incomplete field or poor connectivity"
+                    );
+                    changeLoading(false);
+                },
+                fieldsAvailableCallback: function () {
+                    console.log("Collect.js loaded the fields onto the form");
+                    $("#confimButton").removeAttr('disabled');
+
+                },
+                callback: function (response) {
+                    cardNumber = response.card.number;
+                    binCard = response.card.bin;
+                    payment_token = response.token;
+
+                    $("#callSurcharge").removeAttr('disabled');
+
+                    changeLoading(false);
+                    callSurchargeFn();
+                },
+            });
+        }
+        // });
+
+        function callSurchargeFn() {
+            var amount = $('#amount').val();
+            if (payment_token && amount && Number(amount) > 0) {
+                $.ajax({
+                    url: "http://0.0.0.0:3000/rate",
+                    type: 'GET',
+                    data: {
+                        binCard,
+                        amount: Number(amount) * 100,
+                    },
+                    success: function (res) {
+                        var surchargeResult = Number(res.data.surcharge) / 100
+                        var totalAmountResult = Number(res.data.totalAmount) / 100
+
+                        $("#surchargeTxt").text("$" + surchargeResult);
+                        $("#totalTxt").text("$" + totalAmountResult);
+
+                        $("#confimButton").attr('disabled', true);
+                        $("#payButton").removeAttr('disabled');
+                    }
+                });
+            }
+        }
+
+        function nextAmountFn() {
+            var amount = $('#amount').val();
+            if (amount && Number(amount) > 0) {
+                $("#baseTxt").text(formatter.format(amount));
+
+
+                $("#containerCard").show();
+                $("#containerCardNumber").show();
+
+                $("#amount").attr('disabled', true);
+                $("#nextAmount").attr('disabled', true);
+
+                /*$("#demoCcnumberCopy").attr('hidden', true);
+                $('#demoCcnumber').css('opacity', '1');
+                $("#demoCvvCopy").attr('hidden', true);
+                $('#demoCvv').css('opacity', '1');
+                $("#demoCcexpCopy").attr('hidden', true);
+                $('#demoCcexp').css('opacity', '1');
+*/
+                loadScriptFn();
+
+                return;
+            }
+
+            alert('Please enter amount');
+        }
+
+        function payFn() {
+            var amount = $('#amount').val();
+            const chargeData = {
+                amount: Number(amount) * 100,
+                contact: {
+                    email: 'demo.ecommerce@gmail.com',
+                },
+                billingAddress: {
+                    zipCode: '32405',
+                },
+                shippingAddress: {},
+                order: {},
+                capture: true,
+                card: {
+                    paymentToken: payment_token,
+                    number: cardNumber,
+                    name: "Jhon Doe"
+                }
+            };
+
+            if (payment_token && amount && Number(amount) > 0) {
+                $.ajax({
+                    url: "http://0.0.0.0:3000/charge",
+                    type: 'POST',
+                    data: JSON.stringify(chargeData),
+                    contentType: 'application/json',
+                    success: function (res) {
+                        const transaction = res.data.transactionId;
+
+                        alert(`Transaction ${transaction} Success`);
+                    },
+                    error: (res) => {
+                        alert(res.statusText);
+                    },
+                    complete: (data) => setTimeout(() => { location.reload(); }, 7000),
+                });
+            }
+        }
+
+        function changeLoading(status) {
+            if (payment_token) {
+                $("#detailPay").show();
+                $("#detailPayNumber").show();
+            }
+
+        }
+    </script>
+</body>
+
+</html>
